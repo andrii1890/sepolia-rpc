@@ -1,0 +1,162 @@
+version: "0.1"
+
+services:
+  # 
+  #░██████╗░███████╗████████╗██╗░░██╗
+  # ██╔════╝░██╔════╝╚══██╔══╝██║░░██║
+  # ██║░░██╗░█████╗░░░░░██║░░░███████║
+  # ██║░░╚██╗██╔══╝░░░░░██║░░░██╔══██║
+  # ╚██████╔╝███████╗░░░██║░░░██║░░██║
+  #░╚═════╝░╚══════╝░░░╚═╝░░░╚═╝░░╚═╝
+
+  geth:
+    image: ethereum/client-go:latest
+    ports:
+      - ${GETH_PORT_P2P:-30303}:30303/tcp # P2P TCP
+      - ${GETH_PORT_P2P:-30303}:30303/udp # P2P UDP
+      - ${GETH_PORT:-8545}:8545/tcp
+      - ${WS_PORT:-8546}:8546/tcp
+    command: |
+      --sepolia
+      --http
+      --http.addr=0.0.0.0
+      --http.port=8545
+      --http.vhosts="*"
+      --ws
+      --ws.addr=0.0.0.0
+      --ws.port=8546
+      --ws.origins="*"
+      --http.api="admin,web3,eth,txpool,net"
+      --ws.api="admin,web3,eth,txpool,net"
+      --authrpc.jwtsecret="/root/jwt/jwt.hex"
+      --authrpc.addr=0.0.0.0
+      --authrpc.port=8551
+      --authrpc.vhosts="*"
+      --metrics
+      --metrics.addr=0.0.0.0
+      --metrics.port=6060
+      --metrics.influxdb
+      --metrics.influxdb.endpoint=http://influxdb:8086
+      --metrics.influxdb.username=admin
+      --metrics.influxdb.password=admin
+    networks: [node]
+    volumes:
+      - ./data/geth:/root/.ethereum
+      - ./jwt:/root/jwt
+    restart: unless-stopped
+
+  # 
+  # ██╗░░░░░██╗░██████╗░██╗░░██╗████████╗██╗░░██╗░█████╗░██╗░░░██╗░██████╗███████╗
+  # ██║░░░░░██║██╔════╝░██║░░██║╚══██╔══╝██║░░██║██╔══██╗██║░░░██║██╔════╝██╔════
+  # ██║░░░░░██║██║░░██╗░███████║░░░██║░░░███████║██║░░██║██║░░░██║╚█████╗░█████╗░░
+  # ██║░░░░░██║██║░░╚██╗██╔══██║░░░██║░░░██╔══██║██║░░██║██║░░░██║░╚═══██╗██╔══╝░░
+  # ███████╗██║╚██████╔╝██║░░██║░░░██║░░░██║░░██║╚█████╔╝╚██████╔╝██████╔╝███████╗
+  # ╚══════╝╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░░╚═════╝░╚═════╝░╚══════╝
+  # 
+
+  lighthouse:
+    image: sigp/lighthouse:latest
+    ports:
+      - ${LIGHTHOUSE_PORT_P2P:-9000}:9000/tcp   # P2P TCP
+      - ${LIGHTHOUSE_PORT_P2P:-9000}:9000/udp   # P2P UDP
+      - ${LIGHTHOUSE_HTTP_PORT:-5052}:5052/tcp  # HTTP Port
+    command: |
+      lighthouse bn
+      --network=sepolia
+      --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL:-https://sepolia.beaconstate.info}
+      --execution-endpoint=http://geth:8551
+      --execution-jwt=/opt/jwt/jwt.hex
+      --datadir=/opt/app/beacon/
+      --http
+      --http-address=0.0.0.0
+      --http-port=5052
+      --metrics
+      --metrics-address=0.0.0.0
+      --metrics-port=5054
+      --metrics-allow-origin="*"
+    networks: [node]
+    volumes:
+      - ./data/lighthouse:/opt/app/beacon
+      - ./jwt:/opt/jwt
+    restart: unless-stopped
+
+  # 
+  # ██╗███╗░░██╗███████╗██╗░░░░░██╗░░░██╗██╗░░██╗██████╗░██████╗░
+  # ██║████╗░██║██╔════╝██║░░░░░██║░░░██║╚██╗██╔╝██╔══██╗██╔══██╗
+  # ██║██╔██╗██║█████╗░░██║░░░░░██║░░░██║░╚███╔╝░██║░░██║██████╦
+  # ██║██║╚████║██╔══╝░░██║░░░░░██║░░░██║░██╔██╗░██║░░██║██╔══██╗
+  # ██║██║░╚███║██║░░░░░███████╗╚██████╔╝██╔╝╚██╗██████╔╝██████╦╝
+  # ╚═╝╚═╝░░╚══╝╚═╝░░░░░╚══════╝░╚═════╝░╚═╝░░╚═╝╚═════╝░╚═════╝░
+  #
+
+  influxdb:
+    image: influxdb:1.8.9
+    hostname: influxdb
+    ports:
+      - 8086:8086
+    environment:
+      - INFLUXDB_DB=geth
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_USER_PASSWORD=admin
+    networks: [node]
+    volumes:
+      - ./data/influxdb:/var/lib/influxdb
+    restart: unless-stopped
+
+  #  
+  # ███╗░░░███╗░█████╗░███╗░░██╗██╗████████╗░█████╗░██████╗░██╗███╗░░██╗░██████╗░
+  # ████╗░████║██╔══██╗████╗░██║██║╚══██╔══╝██╔══██╗██╔══██╗██║████╗░██║██╔════╝░
+  # ██╔████╔██║██║░░██║██╔██╗██║██║░░░██║░░░██║░░██║██████╔╝██║██╔██╗██║██║░░██╗░
+  # ██║╚██╔╝██║██║░░██║██║╚████║██║░░░██║░░░██║░░██║██╔══██╗██║██║╚████║██║░░╚██╗
+  # ██║░╚═╝░██║╚█████╔╝██║░╚███║██║░░░██║░░░╚█████╔╝██║░░██║██║██║░╚███║╚██████╔╝
+  # ╚═╝░░░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝░╚═════╝░
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:-v2.44.0}
+    user: ":"
+    networks: [node]
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./data/prometheus:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    user: ":"
+    ports:
+      - ${MONITORING_PORT_GRAFANA:-3000}:3000
+    networks: [node]
+    volumes:
+      - ./grafana/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+      - ./grafana/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./grafana/dashboards:/etc/dashboards
+      - ./data/grafana:/var/lib/grafana
+    environment:
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/etc/dashboards/goerli_dashboard.json"
+    restart: unless-stopped
+  loki:
+    image: grafana/loki:2.8.0
+    hostname: loki
+    ports:
+      - ${LOKI_PORT:-3100}:3100
+    networks: [node]
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
+    command: -config.file=/etc/loki/loki-config.yaml
+    restart: unless-stopped
+  promtail:
+    image: grafana/promtail:2.8.0
+    volumes:
+      - ./promtail/config.yml:/etc/promtail/config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/log:/var/log:ro
+    command: |
+      --config.file=/etc/promtail/config.yml
+      --config.expand-env=true
+    networks: [node]
+    restart: unless-stopped
+    
+networks:
+  node:
