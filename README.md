@@ -55,10 +55,10 @@
     echo 'alias influxdb_log="docker logs sepolia-rpc-influxdb-1 -f"' >> $HOME/.profile
     echo 'alias prometheus_log="docker logs sepolia-rpc-prometheus-1 -f"' >> $HOME/.profile
     echo 'alias grafana_log="docker logs sepolia-rpc-grafana-1 -f"' >> $HOME/.profile
-    echo 'alias goerli_log="cd $HOME/sepolia-rpc/ && docker compose logs -f"' >> $HOME/.profile
+    echo 'alias sepolia_log="cd $HOME/sepolia-rpc/ && docker compose logs -f"' >> $HOME/.profile
     source $HOME/.profile
     ```
-    now you can simply find logs: geth_log, lighthouse_log, influxdb_log, prometheus_log, grafana_log, and all-in goerli_log 
+    now you can simply find logs: geth_log, lighthouse_log, influxdb_log, prometheus_log, grafana_log, and all-in sepolia_log 
 ### Also you can find your geth and lighthouse logs in Goerli Dashboard   
 ### Understanding Geth's Dashboard https://geth.ethereum.org/docs/monitoring/understanding-dashboards
 
