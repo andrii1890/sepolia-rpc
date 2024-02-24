@@ -159,6 +159,12 @@ services:
       --config.expand-env=true
     networks: [node]
     restart: unless-stopped
+  node-exporter:
+    image: prom/node-exporter:${NODE_EXPORTER_VERSION:-v1.6.0}
+    ports:
+      - "9100:9100"
+    networks: [node]
+    restart: unless-stopped
     
 networks:
   node:
