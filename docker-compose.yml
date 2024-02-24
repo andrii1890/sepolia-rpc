@@ -43,6 +43,7 @@ services:
     volumes:
       - ./data/geth:/root/.ethereum
       - ./jwt:/root/jwt
+    stop_grace_period: 3m # long grace period to avoid unclean shutdown
     restart: unless-stopped
 
   # 
@@ -78,6 +79,7 @@ services:
     volumes:
       - ./data/lighthouse:/opt/app/beacon
       - ./jwt:/opt/jwt
+    stop_grace_period: 3m # long grace period to avoid unclean shutdown
     restart: unless-stopped
 
   # 
@@ -133,7 +135,7 @@ services:
       - ./grafana/dashboards:/etc/dashboards
       - ./data/grafana:/var/lib/grafana
     environment:
-      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/etc/dashboards/goerli_dashboard.json"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: "/etc/dashboards/sepolia_dashboard.json"
     restart: unless-stopped
   loki:
     image: grafana/loki:2.8.0
