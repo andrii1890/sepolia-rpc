@@ -141,7 +141,7 @@ services:
     image: grafana/loki:2.8.0
     hostname: loki
     ports:
-      - ${LOKI_PORT:-3100}:3100
+      - ${LOKI_PORT:-3200}:3200
     networks: [node]
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/loki-config.yaml
@@ -162,7 +162,7 @@ services:
   node-exporter:
     image: prom/node-exporter:${NODE_EXPORTER_VERSION:-v1.6.0}
     ports:
-      - "9100:9100"
+      - "9200:9200"
     networks: [node]
     restart: unless-stopped
     
