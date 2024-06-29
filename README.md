@@ -51,7 +51,7 @@
     ```
     echo "#Sepolia Alias" >> $HOME/.profile
     echo 'alias geth_log="docker logs sepolia-rpc-geth-1 -f"' >> $HOME/.profile
-    echo 'alias lighthouse_log="docker logs sepolia-rpc-lighthouse-1 -f"' >> $HOME/.profile
+    echo 'alias prysm_log="docker logs sepolia-rpc-prysm-1 -f"' >> $HOME/.profile
     echo 'alias influxdb_log="docker logs sepolia-rpc-influxdb-1 -f"' >> $HOME/.profile
     echo 'alias prometheus_log="docker logs sepolia-rpc-prometheus-1 -f"' >> $HOME/.profile
     echo 'alias grafana_log="docker logs sepolia-rpc-grafana-1 -f"' >> $HOME/.profile
