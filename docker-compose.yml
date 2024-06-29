@@ -51,13 +51,13 @@ services:
     image: prysmaticlabs/prysm-beacon-chain:v5.0.4
     ports:
       - 13000:13000/tcp    # P2P TCP
-      - 12000:912000/udp   # P2P UDP
+      - 12000:12000/udp   # P2P UDP
       - 4000:4000/tcp      # HTTP Port
     command: |
       --sepolia
       --checkpoint-sync-url=https://sepolia.beaconstate.info
       --execution-endpoint=http://geth:8551
-      --execution-jwt=/opt/jwt/jwt.hex
+      --jwt-secret=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
       --rpc-host=0.0.0.0
       --rpc-port=4000
