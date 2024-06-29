@@ -63,6 +63,9 @@ services:
       --rpc-port=4000
       --grpc-gateway-host=0.0.0.0
       --grpc-gateway-port=3500
+      --monitoring-host=0.0.0.0
+      --monitoring-port=5054
+      --accept-terms-of-use=true  
     networks: [node]
     volumes:
       - ./data/prysm:/opt/app/beacon
