@@ -21,17 +21,17 @@ services:
       --http
       --http.addr=0.0.0.0
       --http.port=8545
-      --http.vhosts="*"
+      --http.vhosts=*
       --ws
       --ws.addr=0.0.0.0
       --ws.port=8546
       --ws.origins="*"
-      --http.api="admin,web3,eth,txpool,net"
-      --ws.api="admin,web3,eth,txpool,net"
-      --authrpc.jwtsecret="/root/jwt/jwt.hex"
+      --http.api=admin,web3,eth,txpool,net
+      --ws.api=admin,web3,eth,txpool,net
+      --authrpc.jwtsecret=/root/jwt/jwt.hex
       --authrpc.addr=0.0.0.0
       --authrpc.port=8551
-      --authrpc.vhosts="*"
+      --authrpc.vhosts=*
       --metrics
       --metrics.addr=0.0.0.0
       --metrics.port=6060
@@ -74,7 +74,8 @@ services:
       --metrics
       --metrics-address=0.0.0.0
       --metrics-port=5054
-      --metrics-allow-origin="*"
+      --metrics-allow-origin=*
+      --disable-deposit-contract-sync
     networks: [node]
     volumes:
       - ./data/lighthouse:/opt/app/beacon
