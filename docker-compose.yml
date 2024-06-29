@@ -48,21 +48,21 @@ services:
 
   
   prysm:
-    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.0.4.rc.2"
-	ports:
+    image: prysmaticlabs/prysm-beacon-chain:v5.0.4
+    ports:
       - 13000:13000/tcp    # P2P TCP
       - 12000:912000/udp   # P2P UDP
       - 4000:4000/tcp      # HTTP Port
     command: |
-	  --chain-id=sepolia
+      --chain-id=sepolia
       --checkpoint-sync-url=https://sepolia.beaconstate.info
       --execution-endpoint=http://geth:8551
       --execution-jwt=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
       --rpc-host=0.0.0.0
-	  --rpc-port=4000
+      --rpc-port=4000
       --grpc-gateway-host=0.0.0.0
-	  --grpc-gateway-port=3500
+      --grpc-gateway-port=3500
     networks: [node]
     volumes:
       - ./data/prysm:/opt/app/beacon
