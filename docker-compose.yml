@@ -46,39 +46,26 @@ services:
     stop_grace_period: 3m # long grace period to avoid unclean shutdown
     restart: unless-stopped
 
-  # 
-  # ██╗░░░░░██╗░██████╗░██╗░░██╗████████╗██╗░░██╗░█████╗░██╗░░░██╗░██████╗███████╗
-  # ██║░░░░░██║██╔════╝░██║░░██║╚══██╔══╝██║░░██║██╔══██╗██║░░░██║██╔════╝██╔════
-  # ██║░░░░░██║██║░░██╗░███████║░░░██║░░░███████║██║░░██║██║░░░██║╚█████╗░█████╗░░
-  # ██║░░░░░██║██║░░╚██╗██╔══██║░░░██║░░░██╔══██║██║░░██║██║░░░██║░╚═══██╗██╔══╝░░
-  # ███████╗██║╚██████╔╝██║░░██║░░░██║░░░██║░░██║╚█████╔╝╚██████╔╝██████╔╝███████╗
-  # ╚══════╝╚═╝░╚═════╝░╚═╝░░╚═╝░░░╚═╝░░░╚═╝░░╚═╝░╚════╝░░╚═════╝░╚═════╝░╚══════╝
-  # 
-
-  lighthouse:
-    image: sigp/lighthouse:latest
-    ports:
-      - ${LIGHTHOUSE_PORT_P2P:-9000}:9000/tcp   # P2P TCP
-      - ${LIGHTHOUSE_PORT_P2P:-9000}:9000/udp   # P2P UDP
-      - ${LIGHTHOUSE_HTTP_PORT:-5052}:5052/tcp  # HTTP Port
+  
+  prysm:
+    image: "gcr.io/prysmaticlabs/prysm/beacon-chain:v5.0.4.rc.2"
+	ports:
+      - 13000:13000/tcp    # P2P TCP
+      - 12000:912000/udp   # P2P UDP
+      - 4000:4000/tcp      # HTTP Port
     command: |
-      lighthouse bn
-      --network=sepolia
-      --checkpoint-sync-url=${LIGHTHOUSE_CHECKPOINT_SYNC_URL:-https://sepolia.beaconstate.info}
+	  --chain-id=sepolia
+      --checkpoint-sync-url=https://sepolia.beaconstate.info
       --execution-endpoint=http://geth:8551
       --execution-jwt=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
-      --http
-      --http-address=0.0.0.0
-      --http-port=5052
-      --metrics
-      --metrics-address=0.0.0.0
-      --metrics-port=5054
-      --metrics-allow-origin=*
-      --disable-deposit-contract-sync
+      --rpc-host=0.0.0.0
+	  --rpc-port=4000
+      --grpc-gateway-host=0.0.0.0
+	  --grpc-gateway-port=3500
     networks: [node]
     volumes:
-      - ./data/lighthouse:/opt/app/beacon
+      - ./data/prysm:/opt/app/beacon
       - ./jwt:/opt/jwt
     stop_grace_period: 3m # long grace period to avoid unclean shutdown
     restart: unless-stopped
