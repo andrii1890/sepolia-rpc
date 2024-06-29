@@ -54,7 +54,7 @@ services:
       - 12000:912000/udp   # P2P UDP
       - 4000:4000/tcp      # HTTP Port
     command: |
-      --chain-id=sepolia
+      --sepolia
       --checkpoint-sync-url=https://sepolia.beaconstate.info
       --execution-endpoint=http://geth:8551
       --execution-jwt=/opt/jwt/jwt.hex
