@@ -54,9 +54,10 @@ services:
   prysm:
     image: prysmaticlabs/prysm-beacon-chain:v5.0.4
     ports:
-      - 13000:13000/tcp    # P2P TCP
+      - 13000:13000/tcp   # P2P TCP
       - 12000:12000/udp   # P2P UDP
-      - 4000:4000/tcp      # HTTP Port
+      - 4000:4000/tcp     # HTTP Port
+      - 3500:3500         # RPC Prot
       - 5054:5054         # Monitoring Port
     command: |
       --sepolia
@@ -65,9 +66,7 @@ services:
       --jwt-secret=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
       --rpc-host=0.0.0.0
-      --rpc-port=4000
       --grpc-gateway-host=0.0.0.0
-      --grpc-gateway-port=3500
       --monitoring-host=0.0.0.0
       --monitoring-port=5054
       --accept-terms-of-use=true  
