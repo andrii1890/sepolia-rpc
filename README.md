@@ -5,7 +5,7 @@
  
  Monitoring will be available without credentials on: ***http://<YOUR_IP>:3000***
  
- Grafana has 3 dashboard: geth dashboard, lighthouse dashboard, and sepolia dashboard (last simple all-in)
+ Grafana has 3 dashboard: geth dashboard and sepolia dashboard (last simple all-in)
 
  RECOMMENDATION:
  ***configure please your firewall rules (block all income to port 8545,8546,8086,3000 and use whitelist to access to your rpc, more about that can be found:   https://github.com/chaifeng/ufw-docker)***
