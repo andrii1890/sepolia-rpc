@@ -62,6 +62,7 @@ services:
     command: |
       --sepolia
       --checkpoint-sync-url=https://sepolia.beaconstate.info
+      --genesis-beacon-api-url=https://sepolia.beaconstate.info
       --execution-endpoint=http://geth:8551
       --jwt-secret=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
