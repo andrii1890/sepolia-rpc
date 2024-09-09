@@ -52,7 +52,7 @@ services:
 
   
   prysm:
-    image: prysmaticlabs/prysm-beacon-chain:v5.0.4
+    image: prysmaticlabs/prysm-beacon-chain:stable
     ports:
       - 13000:13000/tcp   # P2P TCP
       - 12000:12000/udp   # P2P UDP
