@@ -14,7 +14,7 @@ services:
   #░╚═════╝░╚══════╝░░░╚═╝░░░╚═╝░░╚═╝
 
   geth:
-    image: ethereum/client-go:latest
+    image: ethereum/client-go:stable
     ports:
       - ${GETH_PORT_P2P:-30303}:30303/tcp # P2P TCP
       - ${GETH_PORT_P2P:-30303}:30303/udp # P2P UDP
