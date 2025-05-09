@@ -39,7 +39,7 @@
 ### Relogin to your server to take effect from usermod !!!
 
 ## Second Step 
-- **Clone this repo to your server, navigate to goerli-rpc folder and spin up all docker containers**
+- **Clone this repo to your server, navigate to sepolia-rpc folder and spin up all docker containers**
     ```
     git clone https://github.com/andrii1890/sepolia-rpc.git
     cd sepolia-rpc
@@ -58,8 +58,8 @@
     echo 'alias sepolia_log="cd $HOME/sepolia-rpc/ && docker compose logs -f"' >> $HOME/.profile
     source $HOME/.profile
     ```
-    now you can simply find logs: geth_log, lighthouse_log, influxdb_log, prometheus_log, grafana_log, and all-in sepolia_log 
-### Also you can find your geth and lighthouse logs in Goerli Dashboard   
+    now you can simply find logs: geth_log, prysm_log, influxdb_log, prometheus_log, grafana_log, and all-in sepolia_log 
+### Also you can find your geth and prysm logs in Sepolia Dashboard   
 ### Understanding Geth's Dashboard https://geth.ethereum.org/docs/monitoring/understanding-dashboards
 
 ### If Geth Dashboard doesn't work
