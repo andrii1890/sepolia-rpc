@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
 
   influxdb:
-    image: influxdb:2.7
+    image: influxdb:1.8.9
     hostname: influxdb
     ports:
       - 8086:8086
