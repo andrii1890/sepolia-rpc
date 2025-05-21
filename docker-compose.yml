@@ -1,18 +1,10 @@
-#Created by st.Game
-#https://github.com/andrii1890
-#Find me at Discord: st_Game and Telegram: @Andrii1890
+# Created by st.Game
+# https://github.com/andrii1890
+# Find me at Discord: st_Game and Telegram: @Andrii1890
 
 #Version "1.0"
 
 services:
-  # 
-  #░██████╗░███████╗████████╗██╗░░██╗
-  # ██╔════╝░██╔════╝╚══██╔══╝██║░░██║
-  # ██║░░██╗░█████╗░░░░░██║░░░███████║
-  # ██║░░╚██╗██╔══╝░░░░░██║░░░██╔══██║
-  # ╚██████╔╝███████╗░░░██║░░░██║░░██║
-  #░╚═════╝░╚══════╝░░░╚═╝░░░╚═╝░░╚═╝
-
   geth:
     image: ethereum/client-go:stable
     ports:
@@ -50,9 +42,8 @@ services:
     stop_grace_period: 3m # long grace period to avoid unclean shutdown
     restart: unless-stopped
 
-  
   prysm:
-    image: prysmaticlabs/prysm-beacon-chain:stable
+    image: prysmaticlabs/prysm-beacon-chain:latest
     ports:
       - 13000:13000/tcp   # P2P TCP
       - 12000:12000/udp   # P2P UDP
@@ -69,6 +60,7 @@ services:
       --datadir=/opt/app/beacon/
       --rpc-host=0.0.0.0
       --grpc-gateway-host=0.0.0.0
+      --http-modules=beacon,config,node,validator
       --monitoring-host=0.0.0.0
       --monitoring-port=5054
       --accept-terms-of-use=true  
@@ -79,17 +71,8 @@ services:
     stop_grace_period: 3m # long grace period to avoid unclean shutdown
     restart: unless-stopped
 
-  # 
-  # ██╗███╗░░██╗███████╗██╗░░░░░██╗░░░██╗██╗░░██╗██████╗░██████╗░
-  # ██║████╗░██║██╔════╝██║░░░░░██║░░░██║╚██╗██╔╝██╔══██╗██╔══██╗
-  # ██║██╔██╗██║█████╗░░██║░░░░░██║░░░██║░╚███╔╝░██║░░██║██████╦
-  # ██║██║╚████║██╔══╝░░██║░░░░░██║░░░██║░██╔██╗░██║░░██║██╔══██╗
-  # ██║██║░╚███║██║░░░░░███████╗╚██████╔╝██╔╝╚██╗██████╔╝██████╦╝
-  # ╚═╝╚═╝░░╚══╝╚═╝░░░░░╚══════╝░╚═════╝░╚═╝░░╚═╝╚═════╝░╚═════╝░
-  #
-
   influxdb:
-    image: influxdb:1.8.9
+    image: influxdb:2.7
     hostname: influxdb
     ports:
       - 8086:8086
@@ -101,17 +84,9 @@ services:
     volumes:
       - ./data/influxdb:/var/lib/influxdb
     restart: unless-stopped
-
-  #  
-  # ███╗░░░███╗░█████╗░███╗░░██╗██╗████████╗░█████╗░██████╗░██╗███╗░░██╗░██████╗░
-  # ████╗░████║██╔══██╗████╗░██║██║╚══██╔══╝██╔══██╗██╔══██╗██║████╗░██║██╔════╝░
-  # ██╔████╔██║██║░░██║██╔██╗██║██║░░░██║░░░██║░░██║██████╔╝██║██╔██╗██║██║░░██╗░
-  # ██║╚██╔╝██║██║░░██║██║╚████║██║░░░██║░░░██║░░██║██╔══██╗██║██║╚████║██║░░╚██╗
-  # ██║░╚═╝░██║╚█████╔╝██║░╚███║██║░░░██║░░░╚█████╔╝██║░░██║██║██║░╚███║╚██████╔╝
-  # ╚═╝░░░░░╚═╝░╚════╝░╚═╝░░╚══╝╚═╝░░░╚═╝░░░░╚════╝░╚═╝░░╚═╝╚═╝╚═╝░░╚══╝░╚═════╝░
-
+    
   prometheus:
-    image: prom/prometheus:${PROMETHEUS_VERSION:-v2.44.0}
+    image: prom/prometheus:latest
     user: ":"
     networks: [node]
     volumes:
