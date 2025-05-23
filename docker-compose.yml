@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 
   prysm:
-    image: prysmaticlabs/prysm-beacon-chain:latest
+    image: prysmaticlabs/prysm-beacon-chain:v6.0.2
     ports:
       - 13000:13000/tcp   # P2P TCP
       - 12000:12000/udp   # P2P UDP
@@ -55,7 +55,6 @@ services:
       --checkpoint-sync-url=https://beaconstate-sepolia.chainsafe.io/
       --genesis-beacon-api-url=https://beaconstate-sepolia.chainsafe.io/
       --execution-endpoint=http://geth:8551
-      --suggested-fee-recipient=0x1234567890abcdef1234567890abcdef12345678
       --jwt-secret=/opt/jwt/jwt.hex
       --datadir=/opt/app/beacon/
       --rpc-host=0.0.0.0
